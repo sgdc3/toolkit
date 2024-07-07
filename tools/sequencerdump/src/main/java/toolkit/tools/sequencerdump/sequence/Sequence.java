@@ -1,14 +1,11 @@
-import instrument.Instrument;
+package toolkit.tools.sequencerdump.sequence;
+
+import toolkit.tools.sequencerdump.instrument.Instrument;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Sequence {
-
-    public static final int MIDI_TICKS_PER_QUARTER_NOTE = 96; // 1/4 note = 96 ticks
-    public static final int MIDI_TICKS_PER_16TH_NOTE = MIDI_TICKS_PER_QUARTER_NOTE / 4; // 1/16 note = 24 ticks
-    public static final int MIDI_TICKS_PER_12TH_NOTE = MIDI_TICKS_PER_QUARTER_NOTE / 3; // 1/12 note = 32 ticks
-    public static final int MIDI_TICKS_AUTOMATION_RESOLUTION = 1; // 1/48 note = 8 ticks
 
     private String name;
     private float tempo;
@@ -192,14 +189,19 @@ public class Sequence {
             }
 
             public boolean hasTimbreAutomation() {
-                Point previous = null;
+                //Point previous = null;
                 for (Point point : points) {
+                    if (point.getTimbre() != 64) {
+                        return true;
+                    }
+                    /*
                     if (previous != null) {
                         if (previous.timbre != point.timbre) {
                             return true;
                         }
                     }
                     previous = point;
+                    */
                 }
                 return false;
             }
@@ -270,19 +272,6 @@ public class Sequence {
 
                 public boolean isTriplet() {
                     return triplet;
-                }
-
-                public long toMidiTick() {
-                    long baseTick;
-                    if (isTriplet()) {
-                        // Calculate the base position for triplet notes
-                        int tripletGroup = step / 4; // Each quarter note contains 4 16th notes
-                        int tripletPosition = step % 4; // Position within the 16th note group
-                        baseTick = (long) tripletGroup * MIDI_TICKS_PER_QUARTER_NOTE + tripletPosition * MIDI_TICKS_PER_12TH_NOTE;
-                    } else {
-                        baseTick = (long) step * MIDI_TICKS_PER_16TH_NOTE;
-                    }
-                    return baseTick;
                 }
             }
         }

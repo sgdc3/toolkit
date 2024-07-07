@@ -1,4 +1,4 @@
-package instrument;
+package toolkit.tools.sequencerdump.instrument;
 
 import cwlib.types.data.GUID;
 

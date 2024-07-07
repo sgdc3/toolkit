@@ -1,4 +1,4 @@
-package utils;
+package toolkit.tools.sequencerdump.utils;
 
 import cwlib.enums.Part;
 import cwlib.structs.things.Thing;

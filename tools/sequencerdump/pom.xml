@@ -28,7 +28,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>SequencerDump</mainClass>
+                            <mainClass>toolkit.tools.sequencerdump.SequencerDump</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

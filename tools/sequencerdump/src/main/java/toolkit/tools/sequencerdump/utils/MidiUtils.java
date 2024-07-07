@@ -1,4 +1,4 @@
-package utils;
+package toolkit.tools.sequencerdump.utils;
 
 import javax.sound.midi.*;
 
@@ -15,6 +15,13 @@ public final class MidiUtils {
     public static final double SEMITONE_PITCH_VALUE = (double) ZERO_PITCH_VALUE / PITCH_BEND_RANGE;
 
     private MidiUtils() {
+    }
+
+    public static void trackName(Track track, String name) throws InvalidMidiDataException {
+        byte[] textBytes = name.getBytes();
+        MetaMessage metaMessage = new MetaMessage(0x03, textBytes, textBytes.length);
+        MidiEvent event = new MidiEvent(metaMessage, 0);
+        track.add(event);
     }
 
     public static void controlChange(Track track, long tick, int channel, int controlChange, int value) throws InvalidMidiDataException {
@@ -48,6 +55,28 @@ public final class MidiUtils {
         byte[] textBytes = text.getBytes();
         MetaMessage metaMessage = new MetaMessage(0x01, textBytes, textBytes.length);
         MidiEvent event = new MidiEvent(metaMessage, tick);
+        track.add(event);
+    }
+
+    public static void noteOn(Track track, long tick, int channel, int note, int velocity) throws InvalidMidiDataException {
+        ShortMessage message = new ShortMessage(
+                ShortMessage.NOTE_ON,
+                channel,
+                note,
+                velocity
+        );
+        MidiEvent event = new MidiEvent(message, tick);
+        track.add(event);
+    }
+
+    public static void noteOff(Track track, long tick, int channel, int note) throws InvalidMidiDataException {
+        ShortMessage message = new ShortMessage(
+                ShortMessage.NOTE_OFF,
+                channel,
+                note,
+                0
+        );
+        MidiEvent event = new MidiEvent(message, tick);
         track.add(event);
     }
 }

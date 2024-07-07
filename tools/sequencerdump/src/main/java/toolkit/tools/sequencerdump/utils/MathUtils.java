@@ -1,4 +1,4 @@
-package utils;
+package toolkit.tools.sequencerdump.utils;
 
 public final class MathUtils {
 
