@@ -58,6 +58,8 @@ public class SequencerDump {
         if (fragments == null || fragments.length == 0) {
             return;
         }
+        // Fix file sorting on linux
+        Arrays.sort(fragments, Comparator.comparing(File::getName));
 
         byte[][] data = new byte[fragments.length + 1][];
         data[fragments.length] = new byte[] { 0x46, 0x41, 0x52, 0x34 };
@@ -177,7 +179,14 @@ public class SequencerDump {
                 case MIDI -> new MidiSequenceWriter(sequence);
                 case ABLETON -> new AbletonSequenceWriter(sequence);
             };
-            File sequenceOutputFolder = new File(outputPath, sequence.getName());
+            String sanitizedSequenceName = sequence.getName()
+                    .replace("&quot;", "\"")
+                    .replace("&amp;", "&")
+                    .replace("&lt;", "<")
+                    .replace("&gt;", ">")
+                    .replace("&apos;", "'")
+                    .replaceAll("[\\\\/:*?\"<>|]", "");
+            File sequenceOutputFolder = new File(outputPath, sanitizedSequenceName);
             try {
                 dumper.writeMidiTracks(sequenceOutputFolder);
             } catch (Exception e) {
